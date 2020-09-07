@@ -1,0 +1,32 @@
+---
+- hosts: localhost
+  vars:
+    ansible_python_interpreter: "/usr/bin/python3"
+  become: yes
+  become_user: root
+  tasks:
+    - name: Install python-apt package
+      apt: 
+        name: python3-apt
+        state: present
+    - name: site | hello world
+      shell: echo " no sugar tonight in my coffee"
+    - name: Install NGINX 
+      apt:
+        name: nginx
+        state: present
+    - name: ensure NGINX is running
+      service:
+        name: nginx
+        state: started
+    - name: Install Unbound
+      apt:
+        name: unbound
+        state: present
+    - name: ensure Unbound is running
+      service:
+        name: unbound
+        state: started    
+    - name: showing report
+      debug:
+        var: result
