@@ -15,10 +15,10 @@
       apt:
         name: nginx
         state: present
-    - name: ensure NGINX is running
+    - name: ensure NGINX is stopped
       service:
         name: nginx
-        state: started
+        state: stopped
     - name: Install Unbound
       apt:
         name: unbound
@@ -27,6 +27,18 @@
       service:
         name: unbound
         state: started    
-    - name: showing report
-      debug:
-        var: result
+    - name: Check if NGINX is active
+      command: systemctl status nginx
+      register: deb_check
+      ignore_errors: yes
+      no_log: True
+      failed_when: false
+    - name: Stop NGINX if it is active 
+      service:
+        name: nginx
+        state: stopped
+    - name:  Start NGINX up now
+      service:
+        name: nginx
+        state: started
+
